@@ -6,21 +6,29 @@
       <table>
         <thead>
           <tr>
-            <th><button>Delete</button></th>
-            <th v-for="col in columns" @click="sortTable(col.key)">
-              {{ col.fieldName }}
-              <div
-                v-if="col == sortColumn"
-                class="arrow"
-                :class="[ascending ? 'arrow_up' : 'arrow_down']"
-              ></div>
-            </th>
+            <th class="text-align-center"><button>Delete</button></th>
+            <th>File Name</th>
+            <th>File Size</th>
+            <th>Extraction date time</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="row in rows">
-            <td><input type="checkbox" /></td>
-            <td v-for="col in columns">{{ row[col.key] }}</td>
+            <td class="text-align-center">
+              <input
+                type="checkbox"
+                :class="[row.Status == 0 ? 'disabled' : '']"
+              />
+            </td>
+            <td>
+              <a :href="row.name" :class="[row.Status == 0 ? 'disabled' : '']">
+                {{ row.name }}
+              </a>
+            </td>
+            <td>{{ row.size }}</td>
+            <td>{{ row.extractedAt }}</td>
+            <td>{{ extractStatus[row.Status] }}</td>
           </tr>
         </tbody>
       </table>
@@ -30,8 +38,22 @@
 
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-import Card from '~/components/Card.vue'
-import PercentageTable from '~/components/PercentageTable.vue'
+
+const extractStatus = {
+  0: 'In process',
+  1: 'Downloadable',
+  2: 'Downloaded'
+} as const
+
+type ExtractStatusType = typeof extractStatus[keyof typeof extractStatus]
+
+interface downloadItem {
+  Id: number
+  Name: String
+  Size: number
+  ExtractedAt: Date
+  Status: ExtractStatusType
+}
 
 export default defineComponent({
   el: '#sixthTable',
@@ -39,14 +61,14 @@ export default defineComponent({
   setup() {},
   data() {
     return {
-      currentPage: 1,
-      elementsPerPage: 3,
       ascending: false,
       sortColumn: '',
+      extractStatus,
       columns: [
         {
           key: 'name',
-          fieldName: 'Name'
+          fieldName: 'Name',
+          linkable: true
         },
         {
           key: 'size',
@@ -130,7 +152,9 @@ export default defineComponent({
       return 10
     },
     totalSize() {
-      return 20
+      let total = 0
+      this.rows.forEach((item) => (total += item.size))
+      return total
     }
   },
   methods: {
@@ -169,13 +193,15 @@ table {
 }
 
 table th {
-  text-transform: uppercase;
   text-align: left;
   background: #44475c;
   color: #fff;
   cursor: pointer;
   padding: 8px;
   min-width: 30px;
+}
+table th:first-child {
+  width: 50px;
 }
 table th:hover {
   background: #717699;
@@ -230,5 +256,14 @@ table tbody tr:nth-child(2n) td {
 
 .right {
   float: right;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.disabled {
+  pointer-events: none;
+  color: gray;
 }
 </style>
