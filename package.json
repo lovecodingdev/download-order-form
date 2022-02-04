@@ -1,5 +1,5 @@
 {
-  "name": "FlowOfPeopleDashBoard",
+  "name": "download-order-form",
   "version": "1.0.0",
   "private": true,
   "engines": {
@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@aspida/axios": "^1.7.1",
+    "@lassehaslev/vue-downloader": "^0.1.0",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/composition-api": "^0.29.2",
     "axios": "^0.21.4",
