@@ -21,7 +21,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="row in rows">
+          <tr v-for="row in rows" :key="row.id">
             <td class="text-align-center">
               <input
                 v-model="checkedRows"
@@ -37,7 +37,24 @@
             </td>
             <td>{{ row.size }}</td>
             <td>{{ row.extractedAt }}</td>
-            <td>{{ extractStatus[row.Status] }}</td>
+            <td>
+              <font-awesome-icon
+                v-if="row.Status == 0"
+                icon="exclamation-triangle"
+                :style="{ color: '#e9d100' }"
+              />
+              <font-awesome-icon
+                v-if="row.Status == 1"
+                icon="cloud-download-alt"
+                :style="{ color: '#708edc' }"
+              />
+              <font-awesome-icon
+                v-if="row.Status == 2"
+                icon="check"
+                :style="{ color: '#26bc01' }"
+              />
+              {{ extractStatus[row.Status] }}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -195,12 +212,12 @@ table {
   font-family: 'Open Sans', sans-serif;
   width: 100%;
   border-collapse: collapse;
-  border: 3px solid #DEE9F7;
+  border: 3px solid #dee9f7;
 }
 
 table th {
   text-align: left;
-  background: #DEE9F7;
+  background: #dee9f7;
   cursor: pointer;
   padding: 8px;
   min-width: 30px;
@@ -210,7 +227,7 @@ table th:first-child {
   width: 50px;
 }
 table th:hover {
-  background: #DEE9FF;
+  background: #dee9f7;
 }
 table td {
   text-align: left;
@@ -220,7 +237,7 @@ table td:last-child {
   border-right: none;
 }
 table tbody tr:nth-child(2n) td {
-  background: #DEE9F7;
+  background: #dee9f7;
 }
 
 table td input[type='checkbox'] {
@@ -251,16 +268,16 @@ table td input[type='checkbox'] {
   padding: 2px;
   width: 24px;
   height: 24px;
-  background: #0085FF;
-  border: solid 2px #0085FF;
+  background: #0085ff;
+  border: solid 2px #0085ff;
   border-radius: 4px;
   color: white;
   cursor: pointer;
 }
 
 .btn-delete {
-  background: #ED4343;
-  border: solid 2px #ED4343;
+  background: #ed4343;
+  border: solid 2px #ed4343;
   border-radius: 4px;
   color: white;
   cursor: pointer;
