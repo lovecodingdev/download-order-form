@@ -5,7 +5,7 @@
         <span>Result&nbsp;</span>
         <button class="btn-reload" @click="refresh()">&#x27F3;</button>
         <span class="right">
-          {{ downloadedSize }}MB/{{ totalSize }}GB in use
+          {{ totalSize() }}MB / {{ downloadedSize() }}GB in use
         </span>
       </div>
       <table>
@@ -113,16 +113,6 @@ export default defineComponent({
       checkedRows: []
     }
   },
-  computed: {
-    downloadedSize() {
-      return 10
-    },
-    totalSize() {
-      let total = 0
-      this.rows.forEach((item) => (total += item.size))
-      return total
-    }
-  },
   watch: {
     items(newVal, _) {
       this.rows.push(...newVal)
@@ -140,6 +130,14 @@ export default defineComponent({
         }
       })
       this.checkedRows = []
+    },
+    downloadedSize() {
+      return 10
+    },
+    totalSize() {
+      let total = 0
+      this.rows.forEach((item) => (total += item.size))
+      return total
     }
   }
 })
